@@ -337,15 +337,27 @@ class StatusBarController: NSObject, NSMenuDelegate {
 
         switch player.status {
             case Player.Status.paused:
+                icon.statusItem = menuItem
                 menuItem.button?.toolTip = player.stationName
 
             case Player.Status.connecting:
+                icon.statusItem = menuItem
                 menuItem.button?.toolTip =
                     player.stationName +
                     "\n⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯\n" +
                     NSLocalizedString("Connecting…", comment: "Tooltip text")
 
             case Player.Status.playing:
+                let hasSongTitle = !player.songTitle.isEmpty
+                
+                if hasSongTitle {
+                    menuItem.button?.image = nil
+                } else {
+                    icon.statusItem = menuItem
+                }
+                
+                menuItem.title = player.songTitle
+
                 menuItem.button?.toolTip =
                     player.songTitle +
                     "\n⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯\n" +
