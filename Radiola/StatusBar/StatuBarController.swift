@@ -35,7 +35,7 @@ class StatusBarController: NSObject, NSMenuDelegate {
                                                object: nil)
 
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(updateTooltip),
+                                               selector: #selector(playerMetadataChanged),
                                                name: Notification.Name.PlayerMetadataChanged,
                                                object: nil)
 
@@ -315,8 +315,25 @@ class StatusBarController: NSObject, NSMenuDelegate {
      *
      * ****************************************/
     @objc func playerStatusChanged() {
-        icon.playerStatus = player.status
+        updateStatusItem()
         updateTooltip()
+    }
+
+    @objc func playerMetadataChanged() {
+        updateStatusItem()
+        updateTooltip()
+    }
+
+    private func updateStatusItem() {
+        if player.status == .playing {
+            icon.statusItem = nil
+            menuItem.button?.image = nil
+            menuItem.button?.title = player.songTitle
+        } else {
+            menuItem.button?.title = ""
+            icon.playerStatus = player.status
+            icon.statusItem = menuItem
+        }
     }
 
     /* ****************************************
